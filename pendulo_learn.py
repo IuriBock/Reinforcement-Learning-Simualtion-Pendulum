@@ -83,11 +83,14 @@ try:
             angle_reward = 1.0 - abs(angle / 0.204)
 
             # Recompensa Final Combinada
-            custom_reward = (reward * 0.7) + (center_reward * 0.2) + (angle_reward * 0.1)
+            custom_reward = (reward * 0.8) + (center_reward * 0.5) + (angle_reward * 0.2)
 
             # Se ele cair ou sair do limite
             if terminated:
-                custom_reward = (frames - 500)*0.5
+                if frames >= 500:
+                    custom_reward = 100
+                else:
+                    custom_reward = -300
             print(custom_reward)    
 
             # A Mágica: Atualização da Q-Table (Equação de Bellman simplificada)
@@ -101,7 +104,7 @@ try:
             total_episode_reward += custom_reward
 
         # Diminuir a aleatoriedade conforme a IA aprende
-        epsilon = max(0.01, epsilon * 0.999)
+        epsilon = max(0.01, epsilon * 0.99)
         frames_history.append(frames)
         rewards_history.append(total_episode_reward)
         # Calcula a média dos últimos 10 episódios para o gráfico não oscilar demais
